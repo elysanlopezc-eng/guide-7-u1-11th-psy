@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colegio Montano - Interactive Study Guide: Class 7 - Applying Psychological Perspectives</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Nunito & Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            montano: {
+              blue: '#1269A8',
+              yellow: '#F7D615',
+              teal: '#54887D',
+              lightBlue: '#88B5C7',
+              olive: '#A6B046',
+              bgSoft: '#F2F5E9'
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'Segoe UI', 'Tahoma', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --montano-blue: #1269A8;
+      --montano-yellow: #F7D615;
+      --montano-teal: #54887D;
+      --montano-lightblue: #88B5C7;
+      --montano-olive: #A6B046;
+      --montano-bgsoft: #F2F5E9;
+    }
+
+    body {
+      background-color: #E2E8F0;
+      font-family: 'Nunito', sans-serif;
+      color: #334155;
+    }
+
+    /* Whiteboard Frame Styling */
+    .whiteboard-frame {
+      background-color: var(--montano-bgsoft);
+      border: 12px solid #CBD5E1;
+      border-radius: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1), inset 0 0 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #E2E8F0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--montano-lightblue);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--montano-blue);
+    }
+
+    .tab-btn.active {
+      background-color: var(--montano-blue);
+      color: #FFFFFF;
+      border-bottom: 4px solid var(--montano-yellow);
+      transform: translateY(-2px);
+    }
+
+    .badge-time {
+      background-color: #E0F2FE;
+      color: #0369A1;
+      border: 1px solid #BAE6FD;
+    }
+  </style>
+</head>
+<body class="p-2 md:p-6 min-h-screen flex flex-col justify-center items-center">
+
+  <!-- Main Container / Digital Whiteboard Frame -->
+  <div id="whiteboard" class="whiteboard-frame w-full max-w-7xl mx-auto min-h-[90vh] flex flex-col overflow-hidden relative">
+    
+    <!-- Header Bar -->
+    <header class="bg-white border-b-2 border-slate-200 p-4 md:px-8 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-4">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+             alt="Colegio Montano Logo" 
+             class="h-14 w-auto object-contain drop-shadow-sm"
+             onerror="this.src='https://placehold.co/150x60/1269A8/FFFFFF?text=Colegio+Montano'">
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold text-montano-blue tracking-tight">COLEGIO MONTANO</h1>
+          <p class="text-xs md:text-sm font-bold text-montano-teal flex items-center gap-2">
+            <span>Psychology Study Guide</span> • <span>Class 7: Applying Psychological Perspectives</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <div class="hidden sm:block text-right">
+          <span class="block text-xs font-semibold text-slate-500">Target Grade</span>
+          <span class="inline-block bg-montano-yellow/30 text-slate-800 text-xs px-2.5 py-0.5 rounded-full font-bold">11th Grade / 4th High School</span>
+        </div>
+        <button onclick="toggleFullscreen()" class="bg-montano-blue hover:bg-montano-teal text-white p-3 rounded-xl shadow transition duration-200 flex items-center gap-2 text-sm font-bold" title="Toggle Fullscreen">
+          <i class="fa-solid fa-expand"></i>
+          <span class="hidden md:inline">Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Interactive Horizontal Tabs Navigation -->
+    <nav class="bg-slate-100 border-b border-slate-300 px-4 pt-3 flex space-x-2 overflow-x-auto text-sm font-bold">
+      <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active px-4 py-3 rounded-t-xl transition duration-200 flex items-center gap-2 whitespace-nowrap text-slate-700">
+        <i class="fa-solid fa-list-check text-montano-yellow"></i> 1. Case Criteria (10m)
+      </button>
+      <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-4 py-3 rounded-t-xl transition duration-200 flex items-center gap-2 whitespace-nowrap text-slate-700">
+        <i class="fa-solid fa-people-group text-montano-yellow"></i> 2. Case Analysis Workshop (25m)
+      </button>
+      <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-4 py-3 rounded-t-xl transition duration-200 flex items-center gap-2 whitespace-nowrap text-slate-700">
+        <i class="fa-solid fa-comments text-montano-yellow"></i> 3. Peer Review & Feedback (15m)
+      </button>
+      <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn px-4 py-3 rounded-t-xl transition duration-200 flex items-center gap-2 whitespace-nowrap text-slate-700">
+        <i class="fa-solid fa-wrench text-montano-yellow"></i> 4. Refinement & Q&A (10m)
+      </button>
+      <button onclick="switchTab('tab5')" id="btn-tab5" class="tab-btn px-4 py-3 rounded-t-xl transition duration-200 flex items-center gap-2 whitespace-nowrap text-slate-700">
+        <i class="fa-solid fa-paper-plane text-montano-yellow"></i> 5. Exit Ticket (5m)
+      </button>
+    </nav>
+
+    <!-- Main Content Display Container -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+
+      <!-- TAB 1: CASE ANALYSIS CRITERIA (10 MIN) -->
+      <section id="tab1" class="tab-content block space-y-6">
+        <div class="bg-white p-6 rounded-2xl border-l-8 border-montano-blue shadow-sm flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <span class="badge-time text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"><i class="fa-regular fa-clock mr-1"></i> 10 Minutes</span>
+            <h2 class="text-2xl font-bold text-montano-blue mt-2">Criteria for Analyzing Psychological Cases</h2>
+            <p class="text-slate-600 text-sm">Learn how to systematically apply multiple psychological perspectives to analyze real and fictional scenarios.</p>
+          </div>
+          <button onclick="speakText('Welcome to Class 7! Today we integrate all major psychological perspectives by analyzing real and fictional cases using a structured 4-step framework.')" class="bg-montano-yellow/30 hover:bg-montano-yellow text-slate-800 text-xs px-3 py-1.5 rounded-full font-bold flex items-center gap-1 transition">
+            <i class="fa-solid fa-volume-high"></i> Listen Overview
+          </button>
+        </div>
+
+        <!-- 4-Step Analysis Framework -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2 hover:shadow-md transition">
+            <div class="w-8 h-8 rounded-full bg-montano-blue text-white flex items-center justify-center font-extrabold text-sm">1</div>
+            <h3 class="font-bold text-montano-blue text-sm">Identify Observable Behavior</h3>
+            <p class="text-xs text-slate-600">Clearly define the subject's actions, emotional responses, and social patterns without introducing immediate assumptions.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2 hover:shadow-md transition">
+            <div class="w-8 h-8 rounded-full bg-montano-teal text-white flex items-center justify-center font-extrabold text-sm">2</div>
+            <h3 class="font-bold text-montano-teal text-sm">Select Primary Lenses</h3>
+            <p class="text-xs text-slate-600">Choose two contrasting perspectives (e.g., Cognitive vs. Behavioral, Biological vs. Sociocultural) that best fit the situation.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2 hover:shadow-md transition">
+            <div class="w-8 h-8 rounded-full bg-montano-olive text-white flex items-center justify-center font-extrabold text-sm">3</div>
+            <h3 class="font-bold text-montano-olive text-sm">Formulate Explanations</h3>
+            <p class="text-xs text-slate-600">Use core terms for each perspective (e.g., schemas, reinforcement, neurotransmitters, cultural norms, or adaptation).</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2 hover:shadow-md transition">
+            <div class="w-8 h-8 rounded-full bg-montano-yellow text-slate-800 flex items-center justify-center font-extrabold text-sm">4</div>
+            <h3 class="font-bold text-slate-800 text-sm">Propose Intervention</h3>
+            <p class="text-xs text-slate-600">Suggest how treatment or support strategies would differ based on the selected perspectives.</p>
+          </div>
+        </div>
+
+        <!-- Perspective Refresher Card -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-montano-blue flex items-center gap-2">
+            <i class="fa-solid fa-palette text-montano-yellow"></i> Perspective Quick Reference Chart
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-blue-700 block">Biological</span>
+              <p class="text-slate-500 text-[11px]">Genes, brain chemistry, nervous system, hormones.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-purple-700 block">Cognitive</span>
+              <p class="text-slate-500 text-[11px]">Thought patterns, memory, perception, problem-solving.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-emerald-700 block">Behavioral</span>
+              <p class="text-slate-500 text-[11px]">Conditioning, rewards, punishments, learned habits.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-rose-700 block">Psychodynamic</span>
+              <p class="text-slate-500 text-[11px]">Unconscious conflicts, childhood trauma, defense mechanisms.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-pink-700 block">Humanistic</span>
+              <p class="text-slate-500 text-[11px]">Free will, self-actualization, ideal vs. actual self.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-teal-700 block">Sociocultural</span>
+              <p class="text-slate-500 text-[11px]">Cultural norms, group pressure, social environment.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-amber-700 block">Evolutionary</span>
+              <p class="text-slate-500 text-[11px]">Survival value, natural selection, species traits.</p>
+            </div>
+            <div class="p-3 bg-montano-bgSoft rounded-xl border border-slate-200">
+              <span class="font-bold text-indigo-700 block">Biopsychosocial</span>
+              <p class="text-slate-500 text-[11px]">Holistic integration of biology, psychology, and social factors.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CASE ANALYSIS WORKSHOP (25 MIN) -->
+      <section id="tab2" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border-l-8 border-montano-teal shadow-sm flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <span class="badge-time text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"><i class="fa-regular fa-clock mr-1"></i> 25 Minutes</span>
+            <h2 class="text-2xl font-bold text-montano-blue mt-2">Team Case Workshop & Multi-Lens Analysis</h2>
+            <p class="text-slate-600 text-sm">Select a case profile below, compare explanations across perspectives, and practice delivering your team's oral analysis.</p>
+          </div>
+        </div>
+
+        <!-- Case Selector -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="loadCase(1)" id="case-btn-1" class="p-4 bg-white border-2 border-montano-blue rounded-2xl text-left shadow-sm hover:shadow-md transition">
+            <span class="text-[10px] font-bold text-montano-blue uppercase tracking-wider block">Case Profile 1</span>
+            <h3 class="font-bold text-slate-800 text-sm mt-1">Sofia's Screen Addiction</h3>
+            <p class="text-xs text-slate-500 mt-1">Struggles with compulsory social media usage until 3 AM despite dropping grades.</p>
+          </button>
+
+          <button onclick="loadCase(2)" id="case-btn-2" class="p-4 bg-white border border-slate-200 rounded-2xl text-left shadow-sm hover:shadow-md transition">
+            <span class="text-[10px] font-bold text-montano-teal uppercase tracking-wider block">Case Profile 2</span>
+            <h3 class="font-bold text-slate-800 text-sm mt-1">Carlos's Athletic Choking</h3>
+            <p class="text-xs text-slate-500 mt-1">Performs flawlessly during soccer practice but freezes up during championship matches.</p>
+          </button>
+
+          <button onclick="loadCase(3)" id="case-btn-3" class="p-4 bg-white border border-slate-200 rounded-2xl text-left shadow-sm hover:shadow-md transition">
+            <span class="text-[10px] font-bold text-montano-olive uppercase tracking-wider block">Case Profile 3</span>
+            <h3 class="font-bold text-slate-800 text-sm mt-1">Elena's Social Isolation</h3>
+            <p class="text-xs text-slate-500 mt-1">Withdrew from friends after moving to a new country with a very different culture.</p>
+          </button>
+        </div>
+
+        <!-- Active Case Card -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="bg-montano-bgSoft p-4 rounded-xl border border-slate-200 text-xs text-slate-800 space-y-2">
+            <span id="active-case-title" class="font-extrabold text-montano-blue text-sm block">Case Profile 1: Sofia's Screen Addiction</span>
+            <p id="active-case-desc" class="text-slate-600 leading-relaxed">
+              Sofia, a 16-year-old high school student, spends over 6 hours every night scrolling through social media feeds. She reports feeling anxious when her phone is away, experiences disrupted sleep, and has seen her academic performance decline over the past semester.
+            </p>
+          </div>
+
+          <!-- Comparative Explanation Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 bg-blue-50/50 rounded-xl border border-blue-200 space-y-2 text-xs">
+              <span id="lens-a-title" class="font-bold text-montano-blue block"><i class="fa-solid fa-brain mr-1"></i> Behavioral Explanation</span>
+              <p id="lens-a-text" class="text-slate-600 leading-relaxed">
+                Intermittent reinforcement (notifications and likes) triggers dopamine rewards, creating habit loops. Negative reinforcement occurs when scrolling removes feelings of boredom or loneliness.
+              </p>
+            </div>
+
+            <div class="p-4 bg-purple-50/50 rounded-xl border border-purple-200 space-y-2 text-xs">
+              <span id="lens-b-title" class="font-bold text-purple-700 block"><i class="fa-solid fa-gear mr-1"></i> Cognitive Explanation</span>
+              <p id="lens-b-text" class="text-slate-600 leading-relaxed">
+                Sofia holds irrational beliefs, such as "If I am not updated constantly, I will lose my friends" (FOMO). Her cognitive schema misinterprets missed posts as social rejection.
+              </p>
+            </div>
+          </div>
+
+          <!-- Live Voice / Text Practice Simulator -->
+          <div class="pt-4 border-t border-slate-200 space-y-3">
+            <h4 class="text-sm font-bold text-montano-blue flex items-center gap-2">
+              <i class="fa-solid fa-microphone text-montano-yellow"></i> Team Oral Presentation Simulator (Voice / Text)
+            </h4>
+            <p class="text-xs text-slate-600">Deliver your team's explanation of this case. State which two perspectives you chose, use key terms, and suggest an intervention:</p>
+
+            <div class="flex gap-2">
+              <textarea id="voice-input" rows="3" placeholder="Click 'Start Microphone' to record your response or type your analysis here..." class="w-full p-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-montano-blue outline-none"></textarea>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button onclick="startVoiceRecognition()" id="mic-btn" class="bg-montano-blue hover:bg-montano-teal text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                <i class="fa-solid fa-microphone"></i> Start Microphone
+              </button>
+              <button onclick="analyzeCaseResponse()" class="bg-montano-yellow hover:bg-amber-400 text-slate-800 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                <i class="fa-solid fa-chart-line"></i> Evaluate Analysis
+              </button>
+            </div>
+
+            <!-- Performance Dashboard -->
+            <div id="performance-dashboard" class="hidden bg-montano-bgSoft p-4 rounded-xl border border-slate-200 space-y-3 text-xs">
+              <span class="font-bold text-montano-blue block text-xs uppercase tracking-wider"><i class="fa-solid fa-gauge-high mr-1"></i> Analysis Performance Dashboard</span>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-[11px] font-semibold text-slate-500">Perspective Keywords</span>
+                  <div class="text-base font-extrabold text-montano-blue" id="score-accuracy">0%</div>
+                  <div class="w-full bg-slate-200 rounded-full h-1.5 mt-1">
+                    <div id="bar-accuracy" class="bg-montano-blue h-1.5 rounded-full" style="width: 0%"></div>
+                  </div>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-[11px] font-semibold text-slate-500">Clarity & Structure</span>
+                  <div class="text-base font-extrabold text-montano-teal" id="score-clarity">0%</div>
+                  <div class="w-full bg-slate-200 rounded-full h-1.5 mt-1">
+                    <div id="bar-clarity" class="bg-montano-teal h-1.5 rounded-full" style="width: 0%"></div>
+                  </div>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-[11px] font-semibold text-slate-500">Intervention Depth</span>
+                  <div class="text-base font-extrabold text-montano-olive" id="score-depth">0%</div>
+                  <div class="w-full bg-slate-200 rounded-full h-1.5 mt-1">
+                    <div id="bar-depth" class="bg-montano-olive h-1.5 rounded-full" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Keyword Tag Container -->
+              <div>
+                <span class="text-[11px] font-bold text-slate-600 block mb-1">Detected Key Psychological Concepts:</span>
+                <div id="detected-tags" class="flex flex-wrap gap-1.5"></div>
+              </div>
+
+              <!-- Feedback Box -->
+              <div id="ai-feedback" class="p-3 bg-white rounded-lg border border-slate-200 text-slate-700 leading-relaxed text-xs"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: PEER REVIEW & FEEDBACK (15 MIN) -->
+      <section id="tab3" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border-l-8 border-montano-olive shadow-sm flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <span class="badge-time text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"><i class="fa-regular fa-clock mr-1"></i> 15 Minutes</span>
+            <h2 class="text-2xl font-bold text-montano-blue mt-2">Peer Review & Teacher Feedback</h2>
+            <p class="text-slate-600 text-sm">Evaluate another team's case analysis using the structured rubric below.</p>
+          </div>
+        </div>
+
+        <!-- Interactive Peer Evaluation Form -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="text-sm font-bold text-montano-blue flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-montano-yellow"></i> Peer Review Rubric
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <!-- Rubric 1 -->
+            <div class="p-4 bg-montano-bgSoft rounded-xl border border-slate-200 space-y-2">
+              <span class="font-bold text-montano-blue block">1. Perspective Accuracy</span>
+              <p class="text-slate-600 text-[11px]">Did the team correctly use terms and concepts unique to their chosen perspectives?</p>
+              <select id="rubric-q1" class="w-full p-2 rounded-lg border border-slate-300 font-semibold bg-white text-xs">
+                <option value="3">3 - Excellent (Used key terms correctly)</option>
+                <option value="2">2 - Partial (Some terms used vaguely)</option>
+                <option value="1">1 - Needs Work (Confused perspective concepts)</option>
+              </select>
+            </div>
+
+            <!-- Rubric 2 -->
+            <div class="p-4 bg-montano-bgSoft rounded-xl border border-slate-200 space-y-2">
+              <span class="font-bold text-montano-teal block">2. Dual Comparison</span>
+              <p class="text-slate-600 text-[11px]">Did they clearly explain how the two perspectives differ in their explanation?</p>
+              <select id="rubric-q2" class="w-full p-2 rounded-lg border border-slate-300 font-semibold bg-white text-xs">
+                <option value="3">3 - Excellent (Clear contrast established)</option>
+                <option value="2">2 - Partial (Explanations overlapped slightly)</option>
+                <option value="1">1 - Needs Work (Only explained one lens)</option>
+              </select>
+            </div>
+
+            <!-- Rubric 3 -->
+            <div class="p-4 bg-montano-bgSoft rounded-xl border border-slate-200 space-y-2">
+              <span class="font-bold text-montano-olive block">3. Actionable Intervention</span>
+              <p class="text-slate-600 text-[11px]">Is the proposed solution logical and tied directly to the psychological perspective?</p>
+              <select id="rubric-q3" class="w-full p-2 rounded-lg border border-slate-300 font-semibold bg-white text-xs">
+                <option value="3">3 - Excellent (Solution aligns with lens)</option>
+                <option value="2">2 - Partial (Generic solution offered)</option>
+                <option value="1">1 - Needs Work (No intervention suggested)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-700">Peer Comments & Constructive Feedback:</label>
+            <textarea id="peer-comments" rows="2" placeholder="Write specific feedback for your peers..." class="w-full p-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-montano-blue outline-none"></textarea>
+          </div>
+
+          <button onclick="submitPeerReview()" class="w-full bg-montano-blue hover:bg-montano-teal text-white font-bold py-2.5 rounded-xl text-xs transition shadow">
+            Submit Peer Review Feedback
+          </button>
+
+          <div id="peer-review-feedback" class="hidden p-3 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: REFINEMENT & Q&A (10 MIN) -->
+      <section id="tab4" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border-l-8 border-montano-yellow shadow-sm flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <span class="badge-time text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"><i class="fa-regular fa-clock mr-1"></i> 10 Minutes</span>
+            <h2 class="text-2xl font-bold text-montano-blue mt-2">Project Refinement & Frequently Asked Questions</h2>
+            <p class="text-slate-600 text-sm">Refine your team's project based on feedback and clarify tricky conceptual overlaps.</p>
+          </div>
+        </div>
+
+        <!-- Common Clarifications Accordion -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-montano-blue flex items-center gap-2">
+            <i class="fa-solid fa-circle-question text-montano-yellow"></i> Clarifying Overlapping Perspectives
+          </h3>
+
+          <div class="space-y-2 text-xs">
+            <details class="bg-montano-bgSoft p-3 rounded-xl border border-slate-200 cursor-pointer">
+              <summary class="font-bold text-montano-blue">How do Cognitive and Behavioral perspectives differ when treating anxiety?</summary>
+              <p class="mt-2 text-slate-600 leading-relaxed pl-2 border-l-2 border-montano-blue">
+                Behavioral therapists focus on exposure therapy and altering environmental triggers/reinforcers. Cognitive therapists focus on identifying distorted thoughts (catastrophizing) and replacing them with balanced thoughts (cognitive restructuring).
+              </p>
+            </details>
+
+            <details class="bg-montano-bgSoft p-3 rounded-xl border border-slate-200 cursor-pointer">
+              <summary class="font-bold text-montano-teal">What is the main difference between Humanistic and Psychodynamic approaches?</summary>
+              <p class="mt-2 text-slate-600 leading-relaxed pl-2 border-l-2 border-montano-teal">
+                Psychodynamic theory looks backward to childhood and unconscious urges, assuming behavior is driven by internal conflicts. Humanistic theory looks forward at conscious choice, personal potential, and free will.
+              </p>
+            </details>
+
+            <details class="bg-montano-bgSoft p-3 rounded-xl border border-slate-200 cursor-pointer">
+              <summary class="font-bold text-montano-olive">Can a single behavior have Biological, Cognitive, AND Sociocultural causes?</summary>
+              <p class="mt-2 text-slate-600 leading-relaxed pl-2 border-l-2 border-montano-olive">
+                Yes! This is the core principle of the <strong>Biopsychosocial Model</strong>. Most complex human behaviors (like depression, addiction, or aggression) result from an interaction among biological traits, mental processes, and social environments.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: EXIT TICKET (5 MIN) -->
+      <section id="tab5" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border-l-8 border-montano-blue shadow-sm flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <span class="badge-time text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"><i class="fa-regular fa-clock mr-1"></i> 5 Minutes</span>
+            <h2 class="text-2xl font-bold text-montano-blue mt-2">Class 7 Exit Ticket: Mini-Case Application</h2>
+            <p class="text-slate-600 text-sm">Demonstrate your ability to apply perspectives to a new scenario independently.</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+          <div class="bg-montano-bgSoft p-4 rounded-xl border border-slate-200 text-xs text-slate-700">
+            <span class="font-extrabold text-montano-blue block text-xs uppercase tracking-wider">Mini-Scenario:</span>
+            <p class="mt-1 leading-relaxed">
+              "Lucas gets extremely angry and slams his desk whenever he receives constructive criticism on his writing assignments."
+            </p>
+          </div>
+
+          <form id="exit-ticket-form-c7" onsubmit="submitExitTicketC7(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">1. Explain Lucas's reaction using the <strong>Behavioral Perspective</strong> (e.g., reinforcement, past conditioning):</label>
+              <textarea id="et7-q1" required rows="2" placeholder="Lucas may have learned that aggressive reactions eliminate uncomfortable feedback, or past experiences conditioned a defensive response..." class="w-full p-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-montano-blue outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">2. Explain Lucas's reaction using the <strong>Cognitive Perspective</strong> (e.g., schemas, irrational beliefs):</label>
+              <textarea id="et7-q2" required rows="2" placeholder="Lucas may interpret criticism as a personal threat to his intelligence ('If my work isn't perfect, I am a failure')..." class="w-full p-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-montano-teal outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">3. Which psychological perspective do you find most practical for explaining everyday behavior, and why?</label>
+              <input type="text" id="et7-q3" required placeholder="e.g., Cognitive because changing thoughts directly changes emotions and actions." class="w-full p-3 rounded-xl border border-slate-300 text-xs">
+            </div>
+
+            <button type="submit" class="w-full bg-montano-blue hover:bg-montano-teal text-white font-bold py-3 rounded-xl transition duration-200 shadow text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Submit Class 7 Exit Ticket
+            </button>
+          </form>
+
+          <!-- Feedback Box -->
+          <div id="exit-feedback-c7" class="hidden bg-montano-bgSoft p-5 rounded-xl border border-montano-olive/40 space-y-2">
+            <h4 class="text-sm font-bold text-montano-blue flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i> Class 7 Exit Ticket Submitted!
+            </h4>
+            <p id="exit-feedback-msg-c7" class="text-xs text-slate-700 leading-relaxed"></p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer Bar -->
+    <footer class="bg-white border-t border-slate-200 p-3 px-6 text-center text-xs text-slate-500 flex justify-between items-center">
+      <span>&copy; Colegio Montano - Social Sciences Department</span>
+      <span class="font-bold text-montano-blue">Psychology Course (11th Grade)</span>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    /* Tab Switcher Logic */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById('btn-' + tabId).classList.add('active');
+    }
+
+    /* Fullscreen API Toggle */
+    function toggleFullscreen() {
+      const whiteboard = document.getElementById('whiteboard');
+      if (!document.fullscreenElement) {
+        whiteboard.requestFullscreen().catch(err => {
+          alert(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    /* Text-to-Speech Helper */
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Text-to-Speech is not supported in this browser.");
+      }
+    }
+
+    /* Case Data Storage */
+    const caseData = {
+      1: {
+        title: "Case Profile 1: Sofia's Screen Addiction",
+        desc: "Sofia, a 16-year-old high school student, spends over 6 hours every night scrolling through social media feeds. She reports feeling anxious when her phone is away, experiences disrupted sleep, and has seen her academic performance decline over the past semester.",
+        lensA: "Behavioral Explanation",
+        lensAText: "Intermittent reinforcement (notifications and likes) triggers dopamine rewards, creating habit loops. Negative reinforcement occurs when scrolling removes feelings of boredom or loneliness.",
+        lensB: "Cognitive Explanation",
+        lensBText: "Sofia holds irrational beliefs, such as 'If I am not updated constantly, I will lose my friends' (FOMO). Her cognitive schema misinterprets missed posts as social rejection."
+      },
+      2: {
+        title: "Case Profile 2: Carlos's Athletic Choking",
+        desc: "Carlos is a star soccer striker in practice, showing flawless technical skills. However, during official league matches, he freezes, misses easy penalties, and experiences severe nausea before kickoff.",
+        lensA: "Biological Explanation",
+        lensAText: "Overactivation of the sympathetic nervous system releases excess adrenaline and cortisol, triggering a fight-or-flight response that impairs motor precision.",
+        lensB: "Psychodynamic Explanation",
+        lensBText: "Unconscious pressure to live up to his father's former athletic career creates internal anxiety, triggering defense mechanisms like physical somatic illness.",
+        lensC: "Humanistic Explanation",
+        lensCText: "Incongruence between his ideal self (invincible star player) and real self (anxious teenager) creates anxiety due to fear of losing conditional positive regard."
+      },
+      3: {
+        title: "Case Profile 3: Elena's Social Isolation",
+        desc: "Elena moved to a new country six months ago. She sits alone at lunch, avoids class discussions, and spends weekends in her bedroom despite being very outgoing in her home country.",
+        lensA: "Sociocultural Explanation",
+        lensAText: "Culture shock and differences in social norms make Elena feel out of place. Group dynamics and lack of a familiar social support network hinder her social integration.",
+        lensB: "Evolutionary Explanation",
+        lensBText: "Humans evolved to seek inclusion in familiar social groups. Being in an unfamiliar tribe triggers adaptive caution and withdrawal to avoid potential social rejection."
+      }
+    };
+
+    function loadCase(caseNum) {
+      const data = caseData[caseNum];
+      document.getElementById('active-case-title').innerText = data.title;
+      document.getElementById('active-case-desc').innerText = data.desc;
+      document.getElementById('lens-a-title').innerHTML = `<i class="fa-solid fa-brain mr-1"></i> ${data.lensA}`;
+      document.getElementById('lens-a-text').innerText = data.lensAText;
+      document.getElementById('lens-b-title').innerHTML = `<i class="fa-solid fa-gear mr-1"></i> ${data.lensB}`;
+      document.getElementById('lens-b-text').innerText = data.lensBText;
+
+      // Update button borders
+      [1, 2, 3].forEach(n => {
+        const btn = document.getElementById(`case-btn-${n}`);
+        if (n === caseNum) {
+          btn.className = "p-4 bg-white border-2 border-montano-blue rounded-2xl text-left shadow-sm hover:shadow-md transition";
+        } else {
+          btn.className = "p-4 bg-white border border-slate-200 rounded-2xl text-left shadow-sm hover:shadow-md transition";
+        }
+      });
+
+      speakText(`Loaded ${data.title}. ${data.desc}`);
+    }
+
+    /* Speech Recognition Simulator & Analysis */
+    function startVoiceRecognition() {
+      const btn = document.getElementById('mic-btn');
+      const input = document.getElementById('voice-input');
+
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        btn.classList.add('animate-pulse', 'bg-red-600');
+        btn.innerHTML = `<i class="fa-solid fa-microphone-slash"></i> Listening...`;
+
+        recognition.start();
+
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          input.value = transcript;
+          btn.classList.remove('animate-pulse', 'bg-red-600');
+          btn.innerHTML = `<i class="fa-solid fa-microphone"></i> Start Microphone`;
+        };
+
+        recognition.onerror = function() {
+          btn.classList.remove('animate-pulse', 'bg-red-600');
+          btn.innerHTML = `<i class="fa-solid fa-microphone"></i> Start Microphone`;
+          alert("Speech recognition error or permission denied.");
+        };
+      } else {
+        alert("Web Speech API is not supported in this browser. Please type your response.");
+      }
+    }
+
+    function analyzeCaseResponse() {
+      const text = document.getElementById('voice-input').value.toLowerCase();
+      const dashboard = document.getElementById('performance-dashboard');
+      const tagContainer = document.getElementById('detected-tags');
+      const feedbackBox = document.getElementById('ai-feedback');
+
+      if (!text.trim()) {
+        alert("Please enter or speak a response first.");
+        return;
+      }
+
+      dashboard.classList.remove('hidden');
+
+      const keywords = [
+        "behavioral", "cognitive", "biological", "psychodynamic", "humanistic",
+        "sociocultural", "evolutionary", "reinforcement", "schema", "conditioning",
+        "dopamine", "adrenaline", "culture", "norm", "intervention", "therapy"
+      ];
+
+      let found = [];
+      keywords.forEach(kw => {
+        if (text.includes(kw)) found.push(kw);
+      });
+
+      const accuracyScore = Math.min(100, Math.round((found.length / 3) * 100));
+      const clarityScore = Math.min(100, Math.round((text.length / 80) * 100));
+      const depthScore = Math.min(100, Math.round(((found.length + text.length / 50) / 4) * 100));
+
+      document.getElementById('score-accuracy').innerText = accuracyScore + "%";
+      document.getElementById('bar-accuracy').style.width = accuracyScore + "%";
+
+      document.getElementById('score-clarity').innerText = clarityScore + "%";
+      document.getElementById('bar-clarity').style.width = clarityScore + "%";
+
+      document.getElementById('score-depth').innerText = depthScore + "%";
+      document.getElementById('bar-depth').style.width = depthScore + "%";
+
+      // Render tags
+      tagContainer.innerHTML = "";
+      if (found.length > 0) {
+        found.forEach(word => {
+          tagContainer.innerHTML += `<span class="bg-montano-blue/10 text-montano-blue px-2 py-0.5 rounded-md font-bold text-[10px]"><i class="fa-solid fa-tag mr-1"></i>${word}</span>`;
+        });
+      } else {
+        tagContainer.innerHTML = `<span class="text-slate-400 italic text-[11px]">No specific psychological terms detected. Include terms like 'cognitive schema', 'reinforcement', or 'sociocultural norms'.</span>`;
+      }
+
+      // Feedback text
+      if (found.length >= 2) {
+        feedbackBox.innerHTML = `<strong>Strong Case Analysis!</strong> You effectively applied concepts like <em>${found.slice(0, 2).join(', ')}</em> to explain the case. Your suggested intervention demonstrates clear perspective integration.`;
+      } else {
+        feedbackBox.innerHTML = `<strong>Good Start!</strong> To improve your response, make sure to explicitly name two distinct perspectives and include specific terminology (e.g., <em>reinforcement, cognitive distortion, cultural norms</em>).`;
+      }
+    }
+
+    /* Submit Peer Review */
+    function submitPeerReview() {
+      const fb = document.getElementById('peer-review-feedback');
+      fb.classList.remove('hidden');
+      fb.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Peer review submitted successfully! Thank you for providing constructive feedback.`;
+      speakText("Peer review submitted successfully!");
+    }
+
+    /* Exit Ticket Submission */
+    function submitExitTicketC7(e) {
+      e.preventDefault();
+      const feedbackBox = document.getElementById('exit-feedback-c7');
+      const feedbackMsg = document.getElementById('exit-feedback-msg-c7');
+
+      feedbackBox.classList.remove('hidden');
+      feedbackMsg.innerText = `Excellent work! Your Class 7 Exit Ticket has been submitted. You have demonstrated how to synthesize and apply psychological perspectives to real-world behavioral scenarios!`;
+      speakText("Class 7 exit ticket submitted successfully!");
+    }
+  </script>
+</body>
+</html>
